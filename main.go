@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -11,7 +12,10 @@ import (
 )
 
 func main() {
-	run()
+	err := run()
+	if err != nil {
+		os.Exit(1)
+	}
 }
 
 func run() error {
@@ -37,8 +41,8 @@ func newServer(conf serverConfig) *http.Server {
 
 	r.Use(middleware.Logger)
 
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("hello 123"))
+	r.Get("/healthz", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
 	})
 
 	return &http.Server{

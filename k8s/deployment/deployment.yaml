@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+spec:
+  selector:
+    matchLabels:
+      jager: api
+  template:
+    metadata:
+      labels:
+        jager: api
+    spec:
+      containers:
+        - name: api
+          image: jager:0.0.1
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
