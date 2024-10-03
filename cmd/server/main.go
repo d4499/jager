@@ -6,12 +6,17 @@ import (
 	"os"
 	"time"
 
+	"github.com/d4499/jager/internal/auth"
 	postgres "github.com/d4499/jager/internal/database"
+	"github.com/d4499/jager/internal/database/db"
+	"github.com/d4499/jager/internal/email"
+	"github.com/d4499/jager/internal/user"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/render"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
+	"github.com/resend/resend-go/v2"
 )
 
 func main() {
@@ -21,6 +26,12 @@ func main() {
 	}
 }
 
+type serverConfig struct {
+	addr  string
+	pool  *pgxpool.Pool
+	email *resend.Client
+}
+
 func run() error {
 	err := godotenv.Load()
 	if err != nil {
@@ -28,12 +39,14 @@ func run() error {
 	}
 
 	dbUrl := os.Getenv("DATABSE_URL")
+	client := resend.NewClient(os.Getenv("RESEND_APIKEY"))
 
 	pool := postgres.NewPostgres(dbUrl)
 
 	srv := newServer(serverConfig{
-		addr: ":8080",
-		pool: pool,
+		addr:  ":8080",
+		pool:  pool,
+		email: client,
 	})
 
 	err = srv.ListenAndServe()
@@ -44,18 +57,17 @@ func run() error {
 	return nil
 }
 
-type serverConfig struct {
-	addr string
-	pool *pgxpool.Pool
-}
-
 func newServer(conf serverConfig) *http.Server {
 	r := chi.NewRouter()
 	r.Use(render.SetContentType(render.ContentTypeJSON))
 
 	r.Use(middleware.Logger)
 
-	registerRoutes(r)
+	db := db.New(conf.pool)
+	client := email.NewEmailClient(conf.email)
+	userSvc := user.NewUserService(db)
+	authSvc := auth.NewAuthService(db, *client, *userSvc)
+	auth.NewAuthRoutes(authSvc).Register(r)
 
 	return &http.Server{
 		Addr:         conf.addr,
