@@ -41,9 +41,7 @@ func newServer(conf serverConfig) *http.Server {
 
 	r.Use(middleware.Logger)
 
-	r.Get("/healthz", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-	})
+	registerRoutes(r)
 
 	return &http.Server{
 		Addr:         conf.addr,
