@@ -6,9 +6,12 @@ import (
 	"os"
 	"time"
 
+	postgres "github.com/d4499/jager/internal/database"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/render"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -19,11 +22,21 @@ func main() {
 }
 
 func run() error {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	dbUrl := os.Getenv("DATABSE_URL")
+
+	pool := postgres.NewPostgres(dbUrl)
+
 	srv := newServer(serverConfig{
 		addr: ":8080",
+		pool: pool,
 	})
 
-	err := srv.ListenAndServe()
+	err = srv.ListenAndServe()
 	if err != nil {
 		log.Fatalf("Unable to start server: %s", err)
 	}
@@ -33,6 +46,7 @@ func run() error {
 
 type serverConfig struct {
 	addr string
+	pool *pgxpool.Pool
 }
 
 func newServer(conf serverConfig) *http.Server {
