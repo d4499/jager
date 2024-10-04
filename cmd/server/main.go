@@ -39,7 +39,7 @@ func run() error {
 		log.Fatal("Error loading .env file")
 	}
 
-	dbUrl := os.Getenv("DATABSE_URL")
+	dbUrl := os.Getenv("DATABASE_URL")
 	client := resend.NewClient(os.Getenv("RESEND_APIKEY"))
 
 	pool := postgres.NewPostgres(dbUrl)

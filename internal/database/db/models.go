@@ -8,6 +8,13 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type MagicLink struct {
+	ID        string           `json:"id"`
+	Email     string           `json:"email"`
+	Token     string           `json:"token"`
+	ExpiresAt pgtype.Timestamp `json:"expires_at"`
+}
+
 type Session struct {
 	ID        string           `json:"id"`
 	UserID    string           `json:"user_id"`
