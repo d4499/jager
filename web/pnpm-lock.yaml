@@ -8,12 +8,18 @@ importers:
 
   .:
     dependencies:
+      '@modular-forms/solid':
+        specifier: ^0.24.0
+        version: 0.24.0(solid-js@1.9.1)(valibot@1.0.0-beta.0(typescript@5.6.2))
       '@solidjs/router':
         specifier: ^0.14.7
         version: 0.14.7(solid-js@1.9.1)
       solid-js:
         specifier: ^1.8.20
         version: 1.9.1
+      valibot:
+        specifier: 1.0.0-beta.0
+        version: 1.0.0-beta.0(typescript@5.6.2)
     devDependencies:
       typescript:
         specifier: ^5.5.3
@@ -275,6 +281,15 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
+
+  '@modular-forms/solid@0.24.0':
+    resolution: {integrity: sha512-+wW5HvDnco0aff775HVJ8a33Tg0bwj3taR2Zc/ckGV2CjE7K8N6pukJMcu6ip2YChHrndhNZS2qXMf7xGqGtjQ==}
+    peerDependencies:
+      solid-js: ^1.3.1
+      valibot: ^1.0.0
+    peerDependenciesMeta:
+      valibot:
+        optional: true
 
   '@rollup/rollup-android-arm-eabi@4.24.0':
     resolution: {integrity: sha512-Q6HJd7Y6xdB48x8ZNVDOqsbh2uByBhgK8PiQgPhwkIw/HC/YX5Ghq2mQY5sRMZWHb3VsFkWooUVOZHKr7DmDIA==}
@@ -708,6 +723,14 @@ packages:
     peerDependencies:
       browserslist: '>= 4.21.0'
 
+  valibot@1.0.0-beta.0:
+    resolution: {integrity: sha512-Q/oine+NPMXdIy3vwluw0vidHLk0mTPUQBRHc+EHZXnEWF3KzLx1YLsVHPVrgHaMGRfV58P9eGOgxJvi0a059w==}
+    peerDependencies:
+      typescript: '>=5'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
   validate-html-nesting@1.2.2:
     resolution: {integrity: sha512-hGdgQozCsQJMyfK5urgFcWEqsSSrK63Awe0t/IMR0bZ0QMtnuaiHzThW81guu3qx9abLi99NEuiaN6P9gVYsNg==}
 
@@ -1021,6 +1044,12 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
+
+  '@modular-forms/solid@0.24.0(solid-js@1.9.1)(valibot@1.0.0-beta.0(typescript@5.6.2))':
+    dependencies:
+      solid-js: 1.9.1
+    optionalDependencies:
+      valibot: 1.0.0-beta.0(typescript@5.6.2)
 
   '@rollup/rollup-android-arm-eabi@4.24.0':
     optional: true
@@ -1456,6 +1485,10 @@ snapshots:
       browserslist: 4.24.0
       escalade: 3.2.0
       picocolors: 1.1.0
+
+  valibot@1.0.0-beta.0(typescript@5.6.2):
+    optionalDependencies:
+      typescript: 5.6.2
 
   validate-html-nesting@1.2.2: {}
 
