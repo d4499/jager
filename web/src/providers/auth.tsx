@@ -41,20 +41,21 @@ export function AuthProvider(props: { children: JSX.Element }) {
 	}
 
 	async function verifyMagicLink(token: string) {
-		const res = await fetch("http://localhost:8080/api/auth/magic/verify", {
-			method: "POST",
-			credentials: "include",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({ token }),
-		});
+		try {
+			const res = await fetch("http://localhost:8080/api/auth/magic/verify", {
+				method: "POST",
+				credentials: "include",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ token }),
+			});
 
-		if (!res.ok) {
-			console.log(res.json());
+			return res.ok;
+		} catch (e) {
+			console.error("Error verifying magic link", e);
+			return false;
 		}
-
-		return res.json();
 	}
 
 	async function getUser() {

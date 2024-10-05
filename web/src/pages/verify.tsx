@@ -1,15 +1,20 @@
-import { useSearchParams } from "@solidjs/router";
+import { useNavigate, useSearchParams } from "@solidjs/router";
 import { createEffect } from "solid-js";
 import { useAuth } from "../providers/auth";
 
 export function Verify() {
 	const { verifyMagicLink, isAuthenticated } = useAuth();
 	const [searchParams] = useSearchParams();
+	const nav = useNavigate();
 
-	createEffect(() => {
+	createEffect(async () => {
 		const token = searchParams.token;
 		if (token) {
-			verifyMagicLink(token);
+			const verified = await verifyMagicLink(token);
+			if (!verified) {
+				nav("/login", { replace: true });
+			}
+			nav("/protected", { replace: true });
 		}
 	});
 
