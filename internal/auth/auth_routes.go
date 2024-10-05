@@ -2,9 +2,11 @@ package auth
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
+	"github.com/d4499/jager/internal/database/db"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -22,6 +24,11 @@ func (a *AuthRoutes) Register(r *chi.Mux) {
 	r.Route("/api/auth", func(r chi.Router) {
 		r.Post("/magic", a.handleSendMagicLink)
 		r.Post("/magic/verify", a.handleVerifyMagicLink)
+
+		r.Group(func(r chi.Router) {
+			r.Use(SessionMiddleware(&a.a))
+			r.Get("/me", a.me)
+		})
 	})
 }
 
@@ -67,10 +74,29 @@ func (a *AuthRoutes) handleVerifyMagicLink(w http.ResponseWriter, r *http.Reques
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	// set session cookie
 	c := a.a.CreateSessionCookie(s.ID)
 	http.SetCookie(w, &c)
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("successfully verified magic link"))
+}
+
+type SessionResponse struct {
+	UserId string `json:"userId"`
+}
+
+func (a *AuthRoutes) me(w http.ResponseWriter, r *http.Request) {
+	session, ok := r.Context().Value("session").(db.Session)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+	}
+
+	res := SessionResponse{
+		UserId: session.UserID,
+	}
+
+	fmt.Println(session.UserID)
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(res)
 }
