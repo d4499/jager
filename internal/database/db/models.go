@@ -8,6 +8,22 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type JobApplication struct {
+	ID          string           `json:"id"`
+	Title       string           `json:"title"`
+	Company     string           `json:"company"`
+	AppliedDate pgtype.Timestamp `json:"applied_date"`
+	LabelID     pgtype.Text      `json:"label_id"`
+	CreatedAt   pgtype.Timestamp `json:"created_at"`
+	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
+}
+
+type Label struct {
+	ID     string `json:"id"`
+	Title  string `json:"title"`
+	UserID string `json:"user_id"`
+}
+
 type MagicLink struct {
 	ID        string           `json:"id"`
 	Email     string           `json:"email"`
