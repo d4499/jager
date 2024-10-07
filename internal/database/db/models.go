@@ -13,6 +13,7 @@ type JobApplication struct {
 	Title       string           `json:"title"`
 	Company     string           `json:"company"`
 	AppliedDate pgtype.Timestamp `json:"applied_date"`
+	UserID      string           `json:"user_id"`
 	LabelID     pgtype.Text      `json:"label_id"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`

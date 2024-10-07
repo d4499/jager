@@ -26,7 +26,7 @@ func (a *AuthRoutes) Register(r *chi.Mux) {
 		r.Post("/magic/verify", a.handleVerifyMagicLink)
 
 		r.Group(func(r chi.Router) {
-			r.Use(SessionMiddleware(&a.a))
+			r.Use(a.a.SessionMiddleware(&a.a))
 			r.Get("/me", a.me)
 		})
 	})

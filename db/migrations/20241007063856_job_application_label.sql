@@ -10,6 +10,7 @@ CREATE TABLE job_applications (
   title varchar(32) NOT NULL,
   company varchar(32) NOT NULL,
   applied_date timestamp,
+  user_id varchar(30) REFERENCES users (id) NOT NULL,
   label_id varchar(30) REFERENCES labels (id),
   created_at timestamp DEFAULT CURRENT_TIMESTAMP,
   updated_at timestamp DEFAULT CURRENT_TIMESTAMP

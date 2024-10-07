@@ -26,13 +26,13 @@ export function AuthProvider(props: { children: JSX.Element }) {
 	const [session, setSession] = createSignal<Session | null>(null);
 
 	async function sendMagicLink(email: string) {
-		const res = await fetch("http://localhost:8080/api/auth/email", {
+		const res = await fetch("http://localhost:8080/api/auth/magic", {
 			method: "POST",
 			credentials: "include",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(email),
+			body: JSON.stringify({ email }),
 		});
 		if (res.ok) {
 			return true;

@@ -10,6 +10,7 @@ import (
 	postgres "github.com/d4499/jager/internal/database"
 	"github.com/d4499/jager/internal/database/db"
 	"github.com/d4499/jager/internal/email"
+	jobapplication "github.com/d4499/jager/internal/job_application"
 	"github.com/d4499/jager/internal/user"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -78,7 +79,10 @@ func newServer(conf serverConfig) *http.Server {
 	client := email.NewEmailClient(conf.email)
 	userSvc := user.NewUserService(db)
 	authSvc := auth.NewAuthService(db, *client, *userSvc)
+	jobAppSvc := jobapplication.NewJobApplicationService(db)
+
 	auth.NewAuthRoutes(authSvc).Register(r)
+	jobapplication.NewJobApplicationRoutes(jobAppSvc, authSvc).Register(r)
 
 	return &http.Server{
 		Addr:         conf.addr,

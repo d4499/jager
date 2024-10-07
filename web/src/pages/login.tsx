@@ -1,6 +1,7 @@
 import { createForm, SubmitHandler, valiForm } from "@modular-forms/solid";
 import { Match, Switch } from "solid-js";
 import * as v from "valibot";
+import { useAuth } from "../providers/auth";
 
 const LoginSchema = v.object({
 	email: v.pipe(
@@ -13,26 +14,14 @@ const LoginSchema = v.object({
 
 type LoginForm = v.InferInput<typeof LoginSchema>;
 
-async function requestMagicLink(email: string) {
-	const res = await fetch("http://localhost:8080/api/auth/magic", {
-		method: "POST",
-		credentials: "include",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({ email }),
-	});
-
-	return res.json();
-}
-
 export function Login() {
+	const { sendMagicLink } = useAuth();
 	const [loginForm, { Form, Field }] = createForm<LoginForm>({
 		validate: valiForm(LoginSchema),
 	});
 
 	const handleSubmit: SubmitHandler<LoginForm> = (values) => {
-		requestMagicLink(values.email);
+		sendMagicLink(values.email);
 	};
 
 	return (

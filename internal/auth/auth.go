@@ -30,13 +30,12 @@ func isSessionExpired(timestamp pgtype.Timestamp) bool {
 	return time.Now().After(timestamp.Time)
 }
 
-func SessionMiddleware(a *AuthService) func(http.Handler) http.Handler {
+func (a *AuthService) SessionMiddleware(authSvc *AuthService) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			sessionCookie, err := r.Cookie("jager_session")
 			if err != nil {
-				fmt.Println("unable to get session cookie")
-				next.ServeHTTP(w, r)
+				http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
 				return
 			}
 
