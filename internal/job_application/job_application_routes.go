@@ -90,5 +90,28 @@ func (j *JobApplicationRoutes) handleGetAllJobApplications(w http.ResponseWriter
 	render.JSON(w, r, jobApps)
 }
 
+type DeleteJobApplicationRequest struct {
+	UserId string `json:"userId"`
+}
+
 func (j *JobApplicationRoutes) handleDeleteJobApplication(w http.ResponseWriter, r *http.Request) {
+	_, ok := r.Context().Value("session").(db.Session)
+	if !ok {
+		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+		return
+	}
+
+	var deleteJobApplicationRequest DeleteJobApplicationRequest
+
+	if err := json.NewDecoder(r.Body).Decode(&deleteJobApplicationRequest); err != nil {
+		http.Error(w, "Invalid request", http.StatusBadRequest)
+	}
+
+	err := j.svc.DeleteJobApplication(deleteJobApplicationRequest.UserId)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusForbidden)
+		return
+	}
+
+	render.JSON(w, r, "deleted job application")
 }
