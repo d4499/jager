@@ -1,7 +1,12 @@
 import { createForm, SubmitHandler, valiForm } from "@modular-forms/solid";
-import { Match, Switch } from "solid-js";
 import * as v from "valibot";
 import { useAuth } from "../providers/auth";
+import { Button } from "../components/ui/button";
+import {
+	TextField,
+	TextFieldLabel,
+	TextFieldInput,
+} from "../components/ui/text-field";
 
 const LoginSchema = v.object({
 	email: v.pipe(
@@ -21,33 +26,25 @@ export function Login() {
 	});
 
 	const handleSubmit: SubmitHandler<LoginForm> = (values) => {
+		console.log(values);
 		sendMagicLink(values.email);
 	};
 
 	return (
 		<div>
-			<Switch
-				fallback={
-					<>
-						<h1>Login</h1>
-						<Form onSubmit={handleSubmit}>
-							<Field name="email">
-								{(field, props) => (
-									<>
-										<input {...props} type="email" />
-										{field.error && <div>{field.error}</div>}
-									</>
-								)}
-							</Field>
-							<button type="submit">Continue with Email</button>
-						</Form>
-					</>
-				}
-			>
-				<Match when={loginForm.submitted}>
-					<p>Please check your email to continue</p>
-				</Match>
-			</Switch>
+			<h1>Login</h1>
+			<Form onSubmit={handleSubmit}>
+				<Field name="email">
+					{(field, props) => (
+						<TextField class="grid w-full max-w-sm items-center gap-2">
+							<TextFieldLabel for="email">Email</TextFieldLabel>
+							<TextFieldInput {...props} type="email" />
+							{field.error && <div class="text-red-500">{field.error}</div>}
+						</TextField>
+					)}
+				</Field>
+				<Button type="submit">Continue with Email</Button>
+			</Form>
 		</div>
 	);
 }
