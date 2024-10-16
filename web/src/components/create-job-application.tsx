@@ -1,5 +1,6 @@
 import { createForm, SubmitHandler, valiForm } from "@modular-forms/solid";
 import * as v from "valibot";
+import { TextField, TextFieldInput, TextFieldLabel } from "./ui/text-field";
 
 async function createJobApplication(
 	title: string,
@@ -32,7 +33,7 @@ const CreateApplicationSchema = v.object({
 type CreateApplication = v.InferInput<typeof CreateApplicationSchema>;
 
 export function CreateJobApplication() {
-	const [form, { Form, Field }] = createForm<CreateApplication>({
+	const [_, { Form, Field }] = createForm<CreateApplication>({
 		validate: valiForm(CreateApplicationSchema),
 	});
 
@@ -53,10 +54,11 @@ export function CreateJobApplication() {
 			</Field>
 			<Field name="company">
 				{(field, props) => (
-					<>
-						<input {...props} type="text" />
+					<TextField>
+						<TextFieldLabel>{field.name}</TextFieldLabel>
+						<TextFieldInput {...props} type="text" />
 						{field.error && <div>{field.error}</div>}
-					</>
+					</TextField>
 				)}
 			</Field>
 			<Field name="applied_date" type="Date">

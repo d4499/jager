@@ -1,5 +1,4 @@
 import { createResource, For, Match, Switch } from "solid-js";
-import { useAuth } from "../providers/auth";
 import { CreateJobApplication } from "../components/create-job-application";
 
 type JobApplication = {
@@ -22,13 +21,11 @@ async function fetchJobApplications(): Promise<JobApplication[]> {
 }
 
 export function Protected() {
-	const { session } = useAuth();
 	const [jobApplications] = createResource(fetchJobApplications);
 
 	return (
 		<div>
 			<h1>Protected</h1>
-			<h1>{session()?.userId}</h1>
 			<Switch>
 				<Match when={jobApplications.loading}>
 					<p>Loading...</p>

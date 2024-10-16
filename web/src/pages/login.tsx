@@ -1,12 +1,6 @@
 import { createForm, SubmitHandler, valiForm } from "@modular-forms/solid";
 import * as v from "valibot";
 import { useAuth } from "../providers/auth";
-import { Button } from "../components/ui/button";
-import {
-	TextField,
-	TextFieldLabel,
-	TextFieldInput,
-} from "../components/ui/text-field";
 import { createSignal, Match, Switch } from "solid-js";
 
 const LoginSchema = v.object({
