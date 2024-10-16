@@ -1,6 +1,5 @@
 import { createForm, SubmitHandler, valiForm } from "@modular-forms/solid";
 import * as v from "valibot";
-import { TextField, TextFieldInput, TextFieldLabel } from "./ui/text-field";
 
 async function createJobApplication(
 	title: string,
@@ -54,11 +53,10 @@ export function CreateJobApplication() {
 			</Field>
 			<Field name="company">
 				{(field, props) => (
-					<TextField>
-						<TextFieldLabel>{field.name}</TextFieldLabel>
-						<TextFieldInput {...props} type="text" />
+					<>
+						<input {...props} type="text" />
 						{field.error && <div>{field.error}</div>}
-					</TextField>
+					</>
 				)}
 			</Field>
 			<Field name="applied_date" type="Date">

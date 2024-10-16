@@ -5,6 +5,14 @@ import { Verify } from "./pages/verify";
 import { AuthProvider } from "./providers/auth";
 import { Protected } from "./pages/protected";
 import { AuthGuard } from "./components/auth-guard";
+import { globalStyle } from "@macaron-css/core";
+
+globalStyle("*", {
+	backgroundColor: "black",
+	color: "white",
+	margin: 0,
+	padding: 0,
+});
 
 function App() {
 	return (
